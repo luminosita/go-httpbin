@@ -1,53 +1,19 @@
-name: ci
-
+name: GitHub Actions Demo
 on:
   push:
-    branches: [main] # pushes TO main
-  pull_request:
-    branches: [main] # pull requests AGAINST main
-
-# cancel CI runs when a new commit is pushed to any branch except main
-concurrency:
-  group: "test-${{ github.ref }}"
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
-
+    branches: [main]
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        # build against the two latest releases, to match golang's release
-        # policy: https://go.dev/doc/devel/release#policy
-        go-version:
-        - 'stable'
-        - 'oldstable'
-
+  DEMO:
+    runs-on: luminosita-ubuntu
     steps:
-    - uses: actions/setup-go@v5
-      with:
-        go-version: ${{matrix.go-version}}
-
-    - uses: actions/checkout@v4
-
-    - name: test
-      run: make testci
-
-    - uses: codecov/codecov-action@v4
-      if: ${{ matrix.go-version == 'stable' }}
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        fail_ci_if_error: true
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 'stable'
-
-      - uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
+      - run: echo " The job was automatically triggered by a ${{Github.event_name }} event."
+      - run: echo " This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo " The name of your branch is ${{ GitHub.ref }} and your repository is ${{ GitHub.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo " The ${{ GitHub.repository }} repository has been cloned to the runner." 
+      - run: echo " The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ GitHub.workspace }}
+      - run: echo " This job's status is ${{ job.status }}."
