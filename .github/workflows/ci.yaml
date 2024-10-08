@@ -19,4 +19,4 @@ jobs:
       - name: List files in the working directory
         run: |
           ls
-    - run: echo " This job's status is ${{ job.status }}."
+      - run: echo " This job's status is ${{ job.status }}."
