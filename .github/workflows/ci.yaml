@@ -29,7 +29,9 @@ jobs:
       - run: echo " The workflow is now ready to test your code on the runner."
       - name: List files in the repository
         run: |
-          ls ${{ GitHub.workspace }}
+          docker run --rm -v `pwd`:/plugin-source \
+           --platform=linux/arm64 \
+           tykio/tyk-plugin-compiler:v5.2.1 plugin.so $build_id linux arm64
       - name: List files in the working directory
         run: |
           ls
